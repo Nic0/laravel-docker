@@ -1,0 +1,28 @@
+version: "3"
+
+networks:
+  backend:
+    external: true
+
+volumes:
+  mysql_db:
+
+services:
+  app:
+    build: .
+    image: nsirap/laravel-docker
+    ports:
+      - "5000:80"
+    networks:
+      - backend
+    depends_on:
+      - "db"
+  db:
+    image: mysql:5.7.24
+    networks:
+      - backend
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_DATABASE: "laravel"
+    volumes:
+      - mysql_db:/var/lib/mysql
